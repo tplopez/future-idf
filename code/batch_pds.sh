@@ -1,4 +1,20 @@
-for name in /Volumes/MyBook/Tania/project_4_climate_data/ches_climate_data/cordex22/rcp45/ches_GFDL-ESM2M.CRCM5-OUR.nc;
+
+    # File name: batch_pds.sh
+    # Author: Tania Paola Lopez Cantu
+    # E-mail: tlopez@andrew.cmu.edu
+    # Date created: 11.01.2020
+    # Date last modified: 11.01.2020
+
+    # ##############################################################
+    # Purpos:
+
+    # Using extract_pds.py script, batch extract pds from several climate model outputs. Code below needs to be adapted to your specific paths.
+
+    # returns: csv file with partial duration series by grid
+
+
+
+for name in /Volumes/MyBook/Tania/project_4_climate_data/ches_climate_data/cordex22/rcp45/*;
     do
     gcm=$(basename $name);
     scenario_dir=$(dirname $name)

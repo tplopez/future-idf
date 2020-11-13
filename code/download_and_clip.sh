@@ -1,3 +1,20 @@
+
+
+    # File name: download_and_clip.sh
+    # Author: Tania Paola Lopez Cantu
+    # E-mail: tlopez@andrew.cmu.edu
+    # Date created: 10.15.2020
+    # Date last modified: 10.15.2020
+
+    # ##############################################################
+    # Purpos:
+
+    # Download gridded climate model output from urls in "urls.txt" file stored in the home directory.
+    # Clip the model ouput to a certain domain (specified with min, max lat and lon) and remove full domain file to save storage space.
+
+
+
+
 while read line target;
     do
         dir="$line"

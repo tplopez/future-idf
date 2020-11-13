@@ -1,27 +1,25 @@
 library(extRemes)
 library(glue)
 
-# suppressMessages(library(extRemes))
-# suppressMessages(library(glue))
+
+
+    # File name: gev_fit
+    # Author: Tania Paola Lopez Cantu
+    # E-mail: tlopez@andrew.cmu.edu
+    # Date created: 11.02.2020
+    # Date last modified: 11.02.2020
+
+    # ##############################################################
+    # Purpos:
+
+    # Fit GEV using MLE to PDS/AMS
+
+    # returns: csv file of GEV model parameters and depth for 2-,5-,10-,25-,50-,100-year ARI
+
 
 args = commandArgs(trailingOnly=TRUE)
 
-# dataset = args[1]
-# if (dataset =='loca'){
-#     models <- c("IPSL-CM5A-MR", "ACCESS1-3", "MRI-CGCM3", "HadGEM2-CC", "CNRM-CM5", "CanESM2",
-#                     "ACCESS1-0", "HadGEM2-AO", "CSIRO-Mk3-6-0", "IPSL-CM5A-LR", "FGOALS-g2",
-#                     "inmcm4", "CESM1-CAM5", "HadGEM2-ES", "GFDL-ESM2G", "CMCC-CMS", "MIROC-ESM-CHEM", "CESM1-BGC",
-#                     "GFDL-ESM2M", "CMCC-CM", "GISS-E2-R", "bcc-csm1-1-m", "CCSM4", "EC-EARTH",
-#                     "bcc-csm1-1", "MPI-ESM-MR", "MIROC5", "NorESM1-M", "MPI-ESM-LR", "GFDL-CM3", "MIROC-ESM")
-# } else if (dataset) == 'bcca'){
 
-#     models <- c('IPSL-CM5A-LR_r3i1p1', 'MIROC5_r3i1p1', 'MPI-ESM-MR_r1i1p1', 'CanESM2_r3i1p1', 'CSIRO-Mk3-6-0_r4i1p1', 'bcc-csm1-1',
-#                     'CanESM2_r2i1p1', 'CSIRO-Mk3-6-0_r5i1p1', 'CCSM4_r1i1p1', 'IPSL-CM5A-LR_r2i1p1', 'MIROC5_r2i1p1', 'CESM1-BGC', 'CSIRO-Mk3-6-0_r10i1p1', 'CSIRO-Mk3-6-0_r7i1p1',
-#                     'IPSL-CM5A-MR', 'MIROC-ESM-CHEM', 'CNRM-CM5', 'MIROC-ESM', 'IPSL-CM5A-LR_r1i1p1',
-#                     'MIROC5_r1i1p1', 'CSIRO-Mk3-6-0_r6i1p1', 'CanESM2_r1i1p1', 'MPI-ESM-LR_r2i1p1',
-#                     'GFDL-ESM2M', 'CCSM4_r2i1p1', 'CanESM2_r4i1p1', 'CSIRO-Mk3-6-0_r3i1p1', 'IPSL-CM5A-LR_r4i1p1', 'MPI-ESM-LR_r1i1p1', 'GFDL-ESM2G', 'MRI-CGCM3', 'CanESM2_r5i1p1',
-#                     'ACCESS1-0', 'CSIRO-Mk3-6-0_r2i1p1', 'NorESM1-1M', 'MPI-ESM-LR_r3i1p1', 'CSIRO-Mk3-6-0_r9i1p1', 'CSIRO-Mk3-6-0_r1i1p1', 'inmcm4', 'CSIRO-Mk3-6-0_r8i1p1')
-# } else if (dataset) == ''
 
 path = args[1]
 savepath = args[2]
