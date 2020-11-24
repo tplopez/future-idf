@@ -1,0 +1,1 @@
+https://tds.ucar.edu/thredds/fileServer/datazone/cordex/data/raw/NAM-44/day/RCA4/CanESM2/hist/pr/pr.hist.CanESM2.RCA4.day.NAM-44.raw.nc

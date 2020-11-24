@@ -25,4 +25,4 @@ while read line target;
         cdo sellonlatbox,-84,-72,36,44 $fname "./${label}_${fname}"; # CDO command to cut nc file to box defined by lon0,lon1,lat0,lat1
         rm -rf $fname; # Remove original model data
 
-    done < "$HOME/urls.txt" # File with urls to download model data, urls.txt file must be stored at your home directory
+    done < "./urls.txt" # File with urls to download model data, urls.txt file must be stored at your home directory

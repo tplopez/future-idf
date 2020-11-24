@@ -3,18 +3,19 @@ library(glue)
 
 
 
-    # File name: gev_fit
-    # Author: Tania Paola Lopez Cantu
-    # E-mail: tlopez@andrew.cmu.edu
-    # Date created: 11.02.2020
-    # Date last modified: 11.02.2020
+# File name: gev_fit
+# Author: Tania Paola Lopez Cantu
+# E-mail: tlopez@andrew.cmu.edu
+# Date created: 11.02.2020
+# Date last modified: 11.02.2020
 
-    # ##############################################################
-    # Purpos:
+# ##############################################################
+# Purpos:
 
-    # Fit GEV using MLE to PDS/AMS
+# Fit GEV using MLE to PDS/AMS
 
-    # returns: csv file of GEV model parameters and depth for 2-,5-,10-,25-,50-,100-year ARI
+# returns: csv file of GEV model parameters with a 95% CI interval using MLE
+# and depth for 2-,5-,10-,25-,50-,100-year ARI only estimated taking the best parameter estimate
 
 
 args = commandArgs(trailingOnly=TRUE)
