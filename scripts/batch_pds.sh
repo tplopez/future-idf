@@ -11,16 +11,17 @@
 # Using extract_pds.py script, batch extract pds from several climate model outputs. Code below needs to be adapted to your specific paths.
 # returns: csv file with partial duration series by grid
 
-
-for name in climate_data_directory/dataset/rcp/*;
+for name in ../climate_data/*;
     do
-    gcm=$(basename $name);
-    scenario_dir=$(dirname $name)
-    scenario=$(basename $scenario_dir)
-    dataset_dir=$(dirname $scenario_dir)
-    dataset=$(basename $dataset_dir)
-    start_year=2050
-    end_year=2100
-    python extract_pds.py --data $dataset --ncdir $name --window 7 --start_year $start_year --end_year $end_year --savename "directory_to_store_pds/${dataset}/${scenario}/${start_year}-${end_year}/${gcm}.csv"
+    GCM=$(basename $name);
+    SCENARIO_DIR=$(dirname $name)
+    SCENARIO=$(basename $SCENARIO_DIR)
+    DATASET_DIR=$(dirname $SCENARIO_DIR)
+    DATASET=$(basename $DATASET_DIR)
+    START_YEAR=2050
+    END_YEAR=2100
+    OUT_DIR="../output/${DATASET}/${SCENARIO}/${START-YEAR}-${END-YEAR}"
+    mkdir -p $OUT_DIR
+    python extract_pds.py --data $DATASET --ncdir $NAME --window 7 --start_year $START_YEAR --end_year $END_YEAR --savename "${OUT_DIR}/${gcm}.csv"
 
     done

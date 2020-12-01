@@ -1,15 +1,13 @@
 import argparse
-import os
-
-from datetime import timedelta
+import glob
 import itertools
 import math
+import os
+from datetime import timedelta
 
-import glob
+import numpy as np
 import pandas as pd
 from netCDF4 import Dataset
-import numpy as np
-
 
 """
     File name: extract_pds
