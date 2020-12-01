@@ -1,6 +1,6 @@
 # Future IDF Curves
 
-Collection of Python and R scripts to manipulate downscaled climate model output and use it to update Intensity-Frequency-Duration curves used in infrastructure design.
+Collection of Python and R scripts to access and retrieve data from climate model output with an application to updating Intensity-Duration-Frequency curves used in infrastructure design.
 
 ## Requirements
 * Python 3.6+
