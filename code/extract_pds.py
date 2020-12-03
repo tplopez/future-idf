@@ -1,20 +1,9 @@
-import argparse
-import glob
-import itertools
-import math
-import os
-from datetime import timedelta
-
-import numpy as np
-import pandas as pd
-from netCDF4 import Dataset
-
 """
     File name: extract_pds
     Author: Tania Paola Lopez Cantu
     E-mail: tlopez@andrew.cmu.edu
     Date created: 11.05.2020
-    Date last modified: 11.08.2020
+    Date last modified: 12.02.2020
 
     ##############################################################
     Purpos:
@@ -24,6 +13,19 @@ from netCDF4 import Dataset
     returns: csv file with partial duration series by grid
 """
 
+import argparse
+import glob
+import itertools
+import math
+import os
+import sys
+from datetime import timedelta
+
+import netCDF4
+import numpy as np
+import pandas as pd
+from netCDF4 import Dataset
+
 
 def get_timestamps(ncfile):
     """
@@ -32,13 +34,32 @@ def get_timestamps(ncfile):
     input: .nc file
     output: [array] timestamps starting from the .nc file Time variable origin
     """
-    timev = ncfile.variables["time"][:]
-    print(ncfile.variables["time"].units.split(" ")[2])
-    return pd.to_datetime(
-        timev,
-        unit="D",
-        origin=pd.Timestamp(ncfile.variables["time"].units.split(" ")[2]),
-    )
+    timev = []
+    for i, j in ncfile.variables["time_bnds"][:]:
+        timev.append(i)
+    timeunit_ncfile = timeunit_ncfile = ncfile.variables["time"].units.split(" ")[0]
+    timeorigin = pd.Timestamp(" ".join(ncfile.variables["time"].units.split(" ")[2:]))
+    timeorigin = timeorigin.tz_localize(None)
+
+    if "day" in timeunit_ncfile:
+        timeunit = "D"
+        timestamps = pd.to_datetime(
+            timev,
+            unit=timeunit,
+            origin=timeorigin,
+        )
+
+    elif "hour" in timeunit_ncfile:
+        timeunit = "h"
+        timestamps = pd.to_datetime(timev, unit=timeunit, origin=timeorigin)
+
+    else:
+        print("")
+        sys.exit(
+            "Unsupported data temporal resolution. Only daily and subdaily available."
+        )
+    timestamps = timestamps.round("60min")
+    return timestamps
 
 
 def get_pds(df, fr, pr_col, date_col):
@@ -48,6 +69,7 @@ def get_pds(df, fr, pr_col, date_col):
     (following) event, include the event with the higher precipitation"""
 
     N = len(df)
+
     n = int(math.floor(N / 365.25))  # Sample size of largest daily precip values
     omega = float((365.25 * n) / N)  # Average frequency
 
@@ -148,6 +170,7 @@ def get_pds(df, fr, pr_col, date_col):
 
 def main(args):
     dataset = args.data
+    timereso = args.timereso
     dataset = dataset.upper()
     all_d = []
     timestamps = []
@@ -156,14 +179,14 @@ def main(args):
         ncdir = "{}".format(args.ncdir)
     else:
         ncdir = "{}/*".format(args.ncdir)
-
+    print(ncdir)
     savename = args.savename
     window = int(args.window)
 
     print("Extracting PDS from...{}".format(ncdir))
 
     if "BCCA" in dataset:
-        var_name = "pr"
+        var_name = "prec"
         lat_name = "latitude"
         lon_name = "longitude"
     elif "LOCA" in dataset:
@@ -171,13 +194,18 @@ def main(args):
         lat_name = "lat"
         lon_name = "lon"
     elif "CORDEX" in dataset:
-        var_name = "prec"
+        var_name = "pr"
         lat_name = "lat"
         lon_name = "lon"
     elif "MACA" in dataset:
         var_name = "precipitation"
         lat_name = "lat"
         lon_name = "lon"
+
+        lat0 = 263
+        lat1 = 421
+        lon0 = 979
+        lon1 = 1267
 
     if dataset == "other":
         var_name = args.query_variable
@@ -197,10 +225,18 @@ def main(args):
     for ncpath in glob.glob(ncdir):
         ncfile = Dataset(ncpath, "r", fmt="NETCDF4")
         timenc = get_timestamps(ncfile)
-        pr = np.ma.getdata(ncfile.variables[var_name][:, :, :]).squeeze()
 
-        lonlen = len(ncfile.variables[lon_name][:])
-        latlen = len(ncfile.variables[lat_name][:])
+        if "MACA" in dataset:
+            lonlen = len(ncfile.variables["lon"][lon0:lon1])
+            latlen = len(ncfile.variables["lat"][lat0:lat1])
+            pr = np.ma.getdata(
+                ncfile.variables["precipitation"][:, lat0:lat1, lon0:lon1]
+            )
+
+        else:
+            lonlen = len(ncfile.variables[lon_name][:])
+            latlen = len(ncfile.variables[lat_name][:])
+            pr = np.ma.getdata(ncfile.variables[var_name][:, :, :]).squeeze()
 
         lonarr = np.arange(0, lonlen)
         latarr = np.arange(0, latlen)
@@ -219,13 +255,19 @@ def main(args):
     full_domain_temp = pd.concat(all_d)
     # Remove NA values
     # Read NA value from the ncfile and identify in dataframe
-    ncfile_nan_value = ncfile.variables[var_name]._FillValue
+    try:
+        ncfile_nan_value = ncfile.variables[var_name]._FillValue
+    except AttributeError:
+        ncfile_nan_value = netCDF4.default_fillvals["f8"]
     full_domain_temp.replace(to_replace=ncfile_nan_value, value=np.nan, inplace=True)
 
     # Comment line below if not LOCA. Needed to multiply because LOCA units are kgm2s-1
 
     if dataset == "LOCA":
         full_domain_temp = full_domain_temp * 86400
+
+    if timereso == "subdaily":
+        full_domain_temp = full_domain_temp * 86400 / 24
 
     full_domain_temp["date"] = timestamps
 
@@ -240,6 +282,10 @@ def main(args):
     full_domain = full_domain_temp[args.start_year : args.end_year].reset_index()
 
     print("Time series were extracted")
+
+    # import ipdb
+
+    # ipdb.set_trace()
     print("Procceding to extracting PDS")
     grid_cols = [x for x in full_domain if x != "date"]
 
@@ -270,6 +316,12 @@ if __name__ == "__main__":
         type=str,
         required=False,
         help="Variable name in nc file for which PDS will be extracted if dataset other than available.",
+    )
+    parser.add_argument(
+        "--timereso",
+        type=str,
+        required=True,
+        help="Temporal resolution of the input data. Examples: daily or subdaily.",
     )
     parser.add_argument(
         "--ncdir",

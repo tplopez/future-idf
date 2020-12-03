@@ -12,9 +12,9 @@ library(glue)
 # ##############################################################
 # Purpos:
 
-# Fit GEV using MLE to PDS/AMS
+# Fit GEV using GMLE to PDS/AMS
 
-# returns: csv file of GEV model parameters with a 95% CI interval using MLE
+# returns: csv file of GEV model parameters with a 95% CI interval using GMLE
 # and depth for 2-,5-,10-,25-,50-,100-year ARI only estimated taking the best parameter estimate
 
 
@@ -57,7 +57,7 @@ for (f in list.files(path)) {
             md = as.vector(pds3[, (model)])
             id_ <- model.name[model-1]
             tryCatch({
-                fit_mle <- fevd(md, method='MLE', type='GEV')
+                fit_mle <- fevd(md, method='GMLE', type='GEV')
 
                 param.loc <- as.vector(ci(fit_mle, alpha=0.05, type='parameter')[1,])
                 param.scale <- as.vector(ci(fit_mle, alpha=0.05, type='parameter')[2,])
