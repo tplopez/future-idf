@@ -24,12 +24,15 @@ args = commandArgs(trailingOnly=TRUE)
 
 path = args[1]
 savepath = args[2]
-bnn = args[3]
+bound = args[3]
+
+dir.create(file.path(savepath))
 
 for (f in list.files(path)) {
 
     savefile_params = glue('{savepath}/param_{f}')
-    message(savefile_params)
+    #message(savefile_params)
+
     savefile_depth =glue('{savepath}/depth_{f}')
     params_estimated = FALSE
     if (file.exists(savefile_params) == FALSE){
@@ -78,11 +81,11 @@ for (f in list.files(path)) {
 
         message("Estimating precipitation depth...")
 
-        if (bnn == 'U_'){
+        if (bound == 'U_'){
             df = subset(params, select = -c(L_loc, loc, L_scale, scale, L_shape,shape))
-        } else if (bnn == 'L_'){
+        } else if (bound == 'L_'){
             df = subset(params, select = -c(U_loc, loc, U_scale, scale, U_shape,shape) )
-        } else if (bnn == 'best'){
+        } else if (bound == 'best'){
             df = subset(params, select = -c(U_loc, L_loc, U_scale, L_scale, U_shape, L_shape))
         }
         params <- t(df)

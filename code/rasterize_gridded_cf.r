@@ -12,8 +12,8 @@ args = commandArgs(trailingOnly=TRUE)
 path = args[1]
 filename = args[2]
 savepath = args[3]
-save_geojson = args[4]
-polygonspath = args[5]
+polygonspath = args[4]
+save_geojson = args[5]
 
 
 grid_cf = as.matrix(read.table(file=glue("{path}/{f}")))

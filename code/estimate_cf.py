@@ -126,40 +126,40 @@ def main(args):
                 )
             )
 
-        # index_lat = []
-        # index_lon = []
-        # if not os.path.isdir("{}/txt".format(savepath)):
-        #     os.makedirs("{}/txt".format(savepath))
-        # df_temp = df_save.reset_index()
-        # for index in df_temp.models.values:
-        #     idx = index.replace("id", "")
-        #     index_lat.append(int(idx.split("_")[0]))
-        #     index_lon.append(int(idx.split("_")[1]))
+        index_lat = []
+        index_lon = []
+        if not os.path.isdir("{}/txt".format(savepath)):
+            os.makedirs("{}/txt".format(savepath))
+        df_temp = df_save.reset_index()
+        for index in df_temp.models.values:
+            idx = index.replace("id", "")
+            index_lat.append(int(idx.split("_")[0]))
+            index_lon.append(int(idx.split("_")[1]))
 
-        # for rp in [2, 5, 10, 25, 50, 100]:
-        #     idx_lat = set(index_lat)
-        #     idx_lon = set(index_lon)
-        #     raster_matrix = np.zeros((max(idx_lat) + 1, max(idx_lon) + 1))
+        for rp in [2, 5, 10, 25, 50, 100]:
+            idx_lat = set(index_lat)
+            idx_lon = set(index_lon)
+            raster_matrix = np.zeros((max(idx_lat) + 1, max(idx_lon) + 1))
 
-        #     for index in df_temp.models.values:
-        #         idx = index.replace("id", "")
-        #         i = int(idx.split("_")[0])
-        #         j = int(idx.split("_")[1])
+            for index in df_temp.models.values:
+                idx = index.replace("id", "")
+                i = int(idx.split("_")[0])
+                j = int(idx.split("_")[1])
 
-        #         value = df_temp[df_temp.models == index]["{}".format(rp)].values
-        #         raster_matrix[i, j] = value
+                value = df_temp[df_temp.models == index]["{}".format(rp)].values
+                raster_matrix[i, j] = value
 
-        #     raster_matrix = np.array(list(reversed([i for i in raster_matrix])))
+            raster_matrix = np.array(list(reversed([i for i in raster_matrix])))
 
-        #     np.savetxt(
-        #         "{}/txt/cf_{}_{}_{}_{}.txt".format(
-        #             savepath, scen, period, args.statistic, rp
-        #         ),
-        #         raster_matrix,
-        #         fmt="%1f",
-        #         delimiter=" ",
-        #         newline="\n",
-        #     )
+            np.savetxt(
+                "{}/txt/cf_{}_{}_{}_{}.txt".format(
+                    savepath, scen, period, args.statistic, rp
+                ),
+                raster_matrix,
+                fmt="%1f",
+                delimiter=" ",
+                newline="\n",
+            )
 
 
 if __name__ == "__main__":
