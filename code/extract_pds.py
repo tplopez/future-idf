@@ -75,9 +75,8 @@ def get_pds(df, fr, pr_col, date_col):
 
     sorted_df = df.sort_values(by=pr_col, ascending=False)  # Sort pr values descending
 
-    largest = sorted_df.reset_index(drop=True).loc[
-        0 : (n - 1), :
-    ]  # Get largest n values
+    # Get largest n values
+    largest = sorted_df.reset_index(drop=True).loc[0 : (n - 1), :]
 
     days = timedelta(fr)
     # Sort by date to check whether events

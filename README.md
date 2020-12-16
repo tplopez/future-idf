@@ -35,8 +35,8 @@ This repository features a workflow for examining changes in *precipitation extr
     For Mac users, you can install the CDO tools via `brew`. For other systems, please visit the CDO official website for installation guidance.
 
 2. Download and clip netCDF files to a specific domain.
-    - Create a text file named *urls.txt* where each line is a url to download your selected GCM output. See scripts/urls.txt for example.
-    - Download and clip GCM data to your specific domain (in case it covers a larger domain). The default bounding box in `scripts/download_and_clip.sh` is
+    - Create a text file (e.g., `scripts/urls.txt`) where each line is a url to download your selected GCM output.
+    - Download and clip GCM data to your specific domain (in case it covers a larger domain) `./scripts/download_and_clip.sh /path/to/urls.txt`. The default bounding box in the script is
     -84,-72,36,44 which covers the Ohio River Basin, Virginia and partially covers other states in the surrounding area. If you are interested in a different domain, modify the script accordingly.
     Running this script will create a `climate_data` directory under the repository home directory and will download the file to this folder.
 3. Extract Partial Duration Series for each grid cell center of the gridded GCM output.
