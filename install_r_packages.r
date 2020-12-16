@@ -6,7 +6,7 @@
 
 ## First specify the packages of interest
 packages = c("extRemes", "raster",
-             "sp", "glue", "sf")
+             "sp", "glue", "sf", "exactextractr", "geojsonio")
 
 ## Now load or install&load all
 package.check <- lapply(

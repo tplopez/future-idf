@@ -11,7 +11,11 @@
 # Using extract_pds.py script, batch extract pds from several climate model outputs. Code below needs to be adapted to your specific paths.
 # returns: csv file with partial duration series by grid
 
-for name in ../climate_data/*;
+#!/usr/bin/env bash
+URL_PATH=$1  # first commandline argument
+[ ! -f $URL_PATH ] && echo "File not found." && exit  # check if the file exists, exit otherwise
+
+for name in ./climate_data/*;
     do
     GCM=$(basename $name);
     SCENARIO_DIR=$(dirname $name)

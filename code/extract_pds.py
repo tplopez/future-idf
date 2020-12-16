@@ -1,16 +1,16 @@
 """
-    File name: extract_pds
-    Author: Tania Paola Lopez Cantu
-    E-mail: tlopez@andrew.cmu.edu
-    Date created: 11.05.2020
-    Date last modified: 12.02.2020
+File name: extract_pds
+Author: Tania Paola Lopez Cantu
+E-mail: tlopez@andrew.cmu.edu
+Date created: 11.05.2020
+Date last modified: 12.02.2020
 
-    ##############################################################
-    Purpos:
+##############################################################
+Purpos:
 
-    Extract PDS from gridded climate model output
+Extract PDS from gridded climate model output
 
-    returns: csv file with partial duration series by grid
+returns: csv file with partial duration series by grid
 """
 
 import argparse
@@ -282,10 +282,6 @@ def main(args):
     full_domain = full_domain_temp[args.start_year : args.end_year].reset_index()
 
     print("Time series were extracted")
-
-    # import ipdb
-
-    # ipdb.set_trace()
     print("Procceding to extracting PDS")
     grid_cols = [x for x in full_domain if x != "date"]
 
