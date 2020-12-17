@@ -2,9 +2,10 @@
 
 Collection of Python and R scripts to access and retrieve data from climate model output with an application to updating Intensity-Duration-Frequency (IDF) or Depth-Duration-Frequency curves used in infrastructure design.
 
-This repository features a workflow for examining changes in *precipitation extremes* projected by downscaled climate model output and use these to create future DDF curves. Because downscaled climate simulations have inherited biases and the spatial resolution does not match that of the precipitation records used to create DDF curves, we cannot directly use these simulations to study what will occur in the future at a specific location. There exists several techniques to address this challenge, and in this tool we use the Empirical Quantile Delta Change, in which we investigate changes between historical and future simulations for specific quantiles of the extreme rainfall distribution. These changes or most commonly called, *change factors* are applied to the point-scale extreme rainfall quantiles, assuming that changes at the native downscaled projections grid will occur at the station scale.
+<details closed>
+<summary><span style="font-size:1.5em">What is in this repository?</span></summary>
 
-## What is in this repository?
+This repository features a workflow for examining changes in *precipitation extremes* projected by downscaled climate model output and use these to create future DDF curves. Because downscaled climate simulations have inherited biases and the spatial resolution does not match that of the precipitation records used to create DDF curves, we cannot directly use these simulations to study what will occur in the future at a specific location. There exists several techniques to address this challenge, and in this tool we use the Empirical Quantile Delta Change, in which we investigate changes between historical and future simulations for specific quantiles of the extreme rainfall distribution. These changes or most commonly called, *change factors* are applied to the point-scale extreme rainfall quantiles, assuming that changes at the native downscaled projections grid will occur at the station scale.
 
 1. You can download climate model data and clip the data to a desired study domain. You must have installed in your computer the [Climate Data Operators (CDO)](https://code.mpimet.mpg.de/projects/cdo/) tool. See below for further details.
 2. You can extracts time series of a desired variable for a user-specified time period (e.g., 1950 to 2000) and further extracts the partial duration series (PDS), in other words, the largest __n__ independent events in the time series, where __n__ is the number of years in the series.  Two events are independent if they are at least __m__ days apart. __m__ can be controlled by the user. The default value is 7 days.
@@ -12,7 +13,7 @@ This repository features a workflow for examining changes in *precipitation extr
 
 4. You can estimate change factors (future/historical) between different periods. Once return levels for desired exceedance probabilities have been estimated for both the historical and future simulations in component 3, this component computes the change factor (the ratio between future and historical) for each member of a given downscaled climate model data set. It also gives the option to compute an ensemble statistic over the change factors of each member. The statistic can be controlled by the user, but the default value is set to median. The change factors are stored in CSV and text file format.
 5. You can convert the text change factors to raster format. You can also estimate areal change factors by specifiying the polygons (from a shapefile) over to estimate the areal change factor. The method currently relies on the R libraries raster, rmapshaper and exactextractr. The data can be either stored as a shapefile or a geojson file (requires geojsonio library).
-
+</details closed>
 
 ## Requirements
 * Python 3.6+
@@ -54,13 +55,17 @@ This repository features a workflow for examining changes in *precipitation extr
         * `--window`: Number of days extreme events must be apart.
         For help, please run `python extract_pds.py --help`.
 
+    <details closed>
+    <summary>How the output stored in my computer?</summary>
 
-    Note: Usually, downscaled climate model output stored in a server is logically organized according to its parent GCM model, the RCP scenario, etc (e.g., https://tds.ucar.edu/thredds/fileServer/datazone/cordex/data/raw/NAM-44/1hr/WRF/MPI-ESM-LR/rcp85/pr/pr.rcp85.MPI-ESM-LR.WRF.1hr.NAM-44.raw.nc). The `scripts/batch_pds.sh` script takes advantage of this storing architecture to take the name of the model and scenario and make directories in your computer to store the data in a similar fashion.
+    Usually, downscaled climate model output stored in a server is logically organized according to its parent GCM model, the RCP scenario, etc (e.g., https://tds.ucar.edu/thredds/fileServer/datazone/cordex/data/raw/NAM-44/1hr/WRF/MPI-ESM-LR/rcp85/pr/pr.rcp85.MPI-ESM-LR.WRF.1hr.NAM-44.raw.nc). The `scripts/batch_pds.sh` script takes advantage of this storing architecture to take the name of the model and scenario and make directories in your computer to store the data in a similar fashion.
     If the url to your climate data does not look like the one above, you will need to additionally specify the following variables:
+    + `GCM` corresponds to the name of the GCM model
+    + `SCENARIO` corresponds to the simulation scenario, either hist, rcp4.5 or rcp8.5
+    + `DATASET` dataset source of downscaled climate projections. At the moment, the supported datasets are: BCCA v.2, LOCA, MACA and NA-CORDEX.
 
-    * `GCM` corresponds to the name of the GCM model
-    * `SCENARIO` corresponds to the simulation scenario, either hist, rcp4.5 or rcp8.5
-    * `DATASET` dataset source of downscaled climate projections. At the moment, the supported datasets are: BCCA v.2, LOCA, MACA and NA-CORDEX.
+    </details>
+
 4. Fit a Generalized Extreme Distribution to each gridcell in each member for a specific downscaled climate data set.
     - Use `code/gev_fit.r` to fit the GEV distribution.
 
@@ -87,6 +92,6 @@ This repository features a workflow for examining changes in *precipitation extr
         * `save_geojson`: Boolean variable, TRUE if areal change factors over polygons should be stored as GeoJSON files.
 
 
-## Notes
+## Note
 
 This repository is under construction, and we plan to extend the features supported here. If you have any question or suggestion, please [contact us](mailto:tlopez@andrew.cmu.edu).
